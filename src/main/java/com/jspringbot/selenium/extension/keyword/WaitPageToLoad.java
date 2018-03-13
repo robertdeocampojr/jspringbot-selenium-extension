@@ -31,7 +31,6 @@ public class WaitPageToLoad extends AbstractSeleniumExtensionKeyword {
 
     @Override
     public Object execute(Object[] params) {
-        helper.waitPageToLoad(Long.valueOf(params[0].toString()));
         return null;
     }
 }

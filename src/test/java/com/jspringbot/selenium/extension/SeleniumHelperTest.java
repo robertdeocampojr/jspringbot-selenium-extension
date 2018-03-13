@@ -29,6 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.nio.file.Paths;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:spring/spring-selenium-extension-firefox.xml"})
@@ -58,6 +60,12 @@ public class SeleniumHelperTest {
         webdriver.quit();
     }
 
+    public void testHelpers3() throws InterruptedException {
+        Paths.get("classpath:/drivers/mac/geckodriver");
+    }
+
+
+
     public void testHelpers() throws InterruptedException {
         helper.navigateTo("http://www.google.com");
         extensionHelper.highlightElement("name=q");
@@ -68,14 +76,16 @@ public class SeleniumHelperTest {
 
     @Test
     public void testHelpers2() throws InterruptedException {
-        helper.navigateTo("http://qaauto1.aws.ttxcloud.com/sx200/login.xhtml");
-        helper.sendKeys("id=username", "ttx");
-        helper.sendKeys("id=password", "skyTrax");
+        //System.getProperty("user.dir");
+        helper.navigateTo("https://qareg.ttxrdm.com/sx200/login.xhtml");
+        helper.sendKeys("id=username", "qauser");
+        helper.sendKeys("id=password", "Aut0mat!on");
         helper.clickElement("id=loginBtn");
         helper.clickElement("id=nav_unitsmenu");
         Thread.sleep(1000);
         helper.clickElement("id=unitsmenu_sites");
         Thread.sleep(10000);
+        webdriver.quit();
     }
 
 }

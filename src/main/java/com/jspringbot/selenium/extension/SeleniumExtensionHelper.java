@@ -54,16 +54,6 @@ public class SeleniumExtensionHelper{
     }
 
 
-    public void waitPageToLoad(long timeInSeconds) {
-        ExpectedCondition<Boolean> pageLoadCondition = new
-                ExpectedCondition<Boolean>() {
-                    public Boolean apply(WebDriver driver) {
-                        return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
-                    }
-                };
-        WebDriverWait wait = new WebDriverWait(driver, timeInSeconds);
-        wait.until(pageLoadCondition);
-    }
 
 
     public void switchToActiveWindow() {

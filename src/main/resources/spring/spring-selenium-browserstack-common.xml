@@ -11,6 +11,7 @@
   <description>Robot Selenium Keywords</description>
 
   <import resource="classpath:spring/spring-selenium-common.xml"/>
+  <import resource="spring-browser-mob-proxy.xml"/>
 
   <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="ignoreUnresolvablePlaceholders" value="true"/>
@@ -23,7 +24,7 @@
 
   <bean id="desiredCapabilities" class="org.openqa.selenium.remote.DesiredCapabilities"/>
 
-  <bean id="desiredCapabilitiesBean" class="com.jspringbot.selenium.extension.DesiredCapabilitiesBean">
+  <bean id="desiredCapabilitiesBean" class="com.jspringbot.selenium.extension.BrowserStackDesiredCapabilitiesBean">
     <constructor-arg ref="desiredCapabilities"/>
     <property name="browserName" value="${selenium.browser:none}"/>
     <property name="platform" value="${selenium.platform:none}"/>

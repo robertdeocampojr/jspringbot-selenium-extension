@@ -48,7 +48,7 @@
 
   <import resource="spring-browser-mob-proxy.xml"/>
 
-  <bean class="org.jspringbot.keyword.selenium.DesiredCapabilitiesBean">
+  <bean class="com.jspringbot.selenium.extension.DesiredCapabilitiesBean">
     <constructor-arg ref="desiredCapabilities"/>
     <property name="firefoxProfile" ref="profile"/>
     <property name="proxy" value="${selenium.proxy:none}"/>
@@ -100,7 +100,7 @@
     <property name="maximize" value="${selenium.browser.maximize:false}"/>
   </bean>
 
-  <bean id="extensionHelper" class="com.jspringbot.selenium.extension.SeleniumExtensionHelper">
+  <bean id="extensionHelper" class="com.jspringbot.selenium.extension.SeleniumExtensionHelper" destroy-method="closeSession">
     <constructor-arg ref="webdriver"/>
   </bean>
 

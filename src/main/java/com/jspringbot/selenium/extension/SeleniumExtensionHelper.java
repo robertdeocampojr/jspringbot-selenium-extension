@@ -157,4 +157,21 @@ public class SeleniumExtensionHelper{
         return str1.contains(str2);
     }
 
+    public int getElementWidth(String locator){
+        LOG.keywordAppender().appendLocator(locator);
+
+        WebElement element = finder.find(locator);
+
+        LOG.keywordAppender().appendArgument("Width", element.getSize().getWidth());
+        return element.getSize().getWidth();
+    }
+
+    public int getElementHeight(String locator){
+        LOG.keywordAppender().appendLocator(locator);
+
+        WebElement element = finder.find(locator);
+
+        LOG.keywordAppender().appendArgument("Height", element.getSize().getHeight());
+        return element.getSize().getHeight();
+    }
 }

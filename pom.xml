@@ -11,7 +11,7 @@
 
   <groupId>com.github.robertdeocampojr</groupId>
   <artifactId>jspringbot-selenium-extension</artifactId>
-  <version>2.1</version>
+  <version>2.3</version>
   <packaging>jar</packaging>
 
   <name>jspringbot-selenium-extension</name>

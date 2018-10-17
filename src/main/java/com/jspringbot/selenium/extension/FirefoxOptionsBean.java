@@ -67,6 +67,7 @@ public class FirefoxOptionsBean implements InitializingBean, DisposableBean {
             driverDir = new File(userHome, "jspringbot");
             if (!driverDir.isDirectory()) {
                 driverDir.mkdirs();
+                LOGGER.info("Created Driver Directory: " + driverDir.getAbsolutePath());
             }
         }
 
@@ -78,24 +79,26 @@ public class FirefoxOptionsBean implements InitializingBean, DisposableBean {
             this.baseDir = new File(baseStrDir);
             if (!this.baseDir.isDirectory()) {
                 this.baseDir.mkdirs();
+                LOGGER.info("Base Directory: " + this.baseDir.getAbsolutePath());
             }
         }
 
     }
 
     public void setGeckoDrivers(Map<OsCheck.OSType, Resource> geckoDrivers) throws IOException {
-        System.out.println("test");
+        LOGGER.info("Setting Gecko Driver");
         OsCheck.OSType osType = OsCheck.getOperatingSystemType();
         Resource geckoDriver = (Resource)geckoDrivers.get(osType);
         if (geckoDriver == null) {
+            LOGGER.info("Unsupported OS");
             throw new IllegalArgumentException("Unsupported OS " + osType.name());
         } else {
             File driverDir = this.createDriverDir();
             File downloadedFile = new File(driverDir, geckoDriver.getFilename());
 
             if (!downloadedFile.isFile()) {
-                LOGGER.info("Gecko driver version: " + this.geckoDriverVersion);
-                System.out.println("Downloading driver: " + geckoDriver.getURL());
+                LOGGER.info("Download Gecko driver version: " + this.geckoDriverVersion);
+                LOGGER.info("Downloading driver: " + geckoDriver.getURL());
                 IOUtils.copy(geckoDriver.getInputStream(), new FileOutputStream(downloadedFile));
             }
 
@@ -119,6 +122,7 @@ public class FirefoxOptionsBean implements InitializingBean, DisposableBean {
             System.setProperty("webdriver.gecko.driver", geckoDriverFile.getAbsolutePath());
         }
     }
+
 
     public static File unzip(InputStream in, File dir) throws IOException {
         ZipInputStream zin = null;

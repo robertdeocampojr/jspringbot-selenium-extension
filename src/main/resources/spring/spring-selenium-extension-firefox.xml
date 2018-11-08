@@ -67,7 +67,7 @@
     <property name="baseDir" value="${selenium.base.dir:none}"/>
     <property name="geckoDrivers">
       <map>
-        <entry key="Windows" value="${selenium.gecko.driver.url.download:https://github.com/mozilla/geckodriver/releases/download/v${selenium.gecko.driver.version:0.19.1}/geckodriver-v${selenium.gecko.driver.version:0.19.1}-win32.zip"/>
+        <entry key="Windows" value="${selenium.gecko.driver.url.download:https://github.com/mozilla/geckodriver/releases/download}/v${selenium.gecko.driver.version:0.19.1}/geckodriver-v${selenium.gecko.driver.version:0.19.1}-win32.zip"/>
         <entry key="MacOS" value="${selenium.gecko.driver.url.download:https://github.com/mozilla/geckodriver/releases/download/}v${selenium.gecko.driver.version:0.19.1}/geckodriver-v${selenium.gecko.driver.version:0.19.1}-macos.tar.gz"/>
         <entry key="Linux" value="${selenium.gecko.driver.url.download:https://github.com/mozilla/geckodriver/releases/download/}v${selenium.gecko.driver.version:0.19.1}/geckodriver-v${selenium.gecko.driver.version:0.19.1}-linux64.tar.gz"/>
       </map>

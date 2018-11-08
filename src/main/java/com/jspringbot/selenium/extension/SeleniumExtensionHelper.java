@@ -2,15 +2,17 @@ package com.jspringbot.selenium.extension;
 
 import org.jspringbot.keyword.selenium.ElementFinder;
 import org.jspringbot.syntax.HighlightRobotLogger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.awt.datatransfer.*;
+import java.awt.Toolkit;
+import java.awt.event.*;
+import java.awt.Robot;
 
 /**
  * Created by robertdeocampo on 9/30/15.
@@ -21,6 +23,7 @@ public class SeleniumExtensionHelper{
     protected WebDriver driver;
     protected ElementFinder finder;
     protected JavascriptExecutor executor;
+
 
 
     public SeleniumExtensionHelper(WebDriver driver) {
@@ -173,5 +176,70 @@ public class SeleniumExtensionHelper{
 
         LOG.keywordAppender().appendArgument("Height", element.getSize().getHeight());
         return element.getSize().getHeight();
+    }
+
+    private static void setClipboardData(String string) {
+        // StringSelection is a class that can be used for copy and paste
+        // operations.
+        StringSelection stringSelection = new StringSelection(string);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+    }
+
+    /*
+     *  Function to upload the file using robot class
+     */
+    public void upload(String fileLocation) throws Exception {
+
+        // Setting clipboard with file location
+        setClipboardData(fileLocation);
+
+        // native key strokes for CTRL, V and ENTER keys
+        Robot robot = new Robot();
+        Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+
+        LOG.info("OS: " + System.getProperty("os.name"));
+        LOG.info("Browser: " + cap.getBrowserName());
+        Thread.sleep(2000);
+
+        switch (System.getProperty("os.name").toLowerCase()) { // Pass your OS platform name here, I am using properties file where OS name is saved you can as a string.
+
+            case "mac":
+
+                if (!cap.getBrowserName().equalsIgnoreCase("chrome")) { // In mac machine for chrome you need to switch focus to upload dialog again I have saved browser name in properties file you can pass it as string.
+                    robot.keyPress(KeyEvent.VK_META);
+                    robot.keyPress(KeyEvent.VK_TAB);
+                    robot.keyRelease(KeyEvent.VK_META);
+                    robot.keyRelease(KeyEvent.VK_TAB);
+                }
+                robot.delay(2000);
+                robot.keyPress(KeyEvent.VK_META);
+                robot.keyPress(KeyEvent.VK_SHIFT);
+                robot.keyPress(KeyEvent.VK_G);
+                robot.keyRelease(KeyEvent.VK_META);
+                robot.keyRelease(KeyEvent.VK_SHIFT);
+                robot.keyRelease(KeyEvent.VK_G);
+                robot.keyPress(KeyEvent.VK_META);
+                robot.keyPress(KeyEvent.VK_V);
+                robot.keyRelease(KeyEvent.VK_META);
+                robot.keyRelease(KeyEvent.VK_V);
+                robot.keyPress(KeyEvent.VK_ENTER);
+                robot.keyRelease(KeyEvent.VK_ENTER);
+                robot.delay(2000);
+                robot.keyPress(KeyEvent.VK_ENTER);
+                robot.keyRelease(KeyEvent.VK_ENTER);
+                break;
+
+            case "win":
+
+                robot.keyPress(KeyEvent.VK_CONTROL);
+                robot.keyPress(KeyEvent.VK_V);
+                robot.keyRelease(KeyEvent.VK_V);
+                robot.keyRelease(KeyEvent.VK_CONTROL);
+                robot.keyPress(KeyEvent.VK_ENTER);
+                robot.keyRelease(KeyEvent.VK_ENTER);
+                break;
+
+        }
+
     }
 }

@@ -185,61 +185,90 @@ public class SeleniumExtensionHelper{
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
     }
 
-    /*
-     *  Function to upload the file using robot class
-     */
-    public void upload(String fileLocation) throws Exception {
-
+    public void upload(String fileLocation) {
         // Setting clipboard with file location
         setClipboardData(fileLocation);
 
-        // native key strokes for CTRL, V and ENTER keys
-        Robot robot = new Robot();
-        Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+        try {
+            // native key strokes for CTRL, V and ENTER keys
+            Robot robot = new Robot();
+            Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
 
-        LOG.info("OS: " + System.getProperty("os.name"));
-        LOG.info("Browser: " + cap.getBrowserName());
-        Thread.sleep(2000);
+            String platform = cap.getCapability("platform").toString();
+            String browserName = cap.getBrowserName();
 
-        switch (System.getProperty("os.name").toLowerCase()) { // Pass your OS platform name here, I am using properties file where OS name is saved you can as a string.
+            LOG.info("OS: " + platform);
+            LOG.info("Browser: " + browserName);
+            Thread.sleep(2000);
 
-            case "mac":
+            // Pass your OS platform name here, I am using properties file where OS name is saved you can as a string.
+            switch (platform.toLowerCase()) {
 
-                if (!cap.getBrowserName().equalsIgnoreCase("chrome")) { // In mac machine for chrome you need to switch focus to upload dialog again I have saved browser name in properties file you can pass it as string.
+                case "mac":
+                    // In mac machine for chrome you need to switch focus to upload dialog again
+                    // I have saved browser name in properties file you can pass it as string.
+                    if (browserName.equalsIgnoreCase("chrome")) {
+                        robot.keyPress(KeyEvent.VK_META);
+                        robot.keyPress(KeyEvent.VK_TAB);
+                        robot.keyRelease(KeyEvent.VK_META);
+                        robot.keyRelease(KeyEvent.VK_TAB);
+                    }
+                    robot.delay(2000);
                     robot.keyPress(KeyEvent.VK_META);
-                    robot.keyPress(KeyEvent.VK_TAB);
+                    robot.keyPress(KeyEvent.VK_SHIFT);
+                    robot.keyPress(KeyEvent.VK_G);
                     robot.keyRelease(KeyEvent.VK_META);
-                    robot.keyRelease(KeyEvent.VK_TAB);
-                }
-                robot.delay(2000);
-                robot.keyPress(KeyEvent.VK_META);
-                robot.keyPress(KeyEvent.VK_SHIFT);
-                robot.keyPress(KeyEvent.VK_G);
-                robot.keyRelease(KeyEvent.VK_META);
-                robot.keyRelease(KeyEvent.VK_SHIFT);
-                robot.keyRelease(KeyEvent.VK_G);
-                robot.keyPress(KeyEvent.VK_META);
-                robot.keyPress(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_META);
-                robot.keyRelease(KeyEvent.VK_V);
-                robot.keyPress(KeyEvent.VK_ENTER);
-                robot.keyRelease(KeyEvent.VK_ENTER);
-                robot.delay(2000);
-                robot.keyPress(KeyEvent.VK_ENTER);
-                robot.keyRelease(KeyEvent.VK_ENTER);
-                break;
-
-            case "win":
-
-                robot.keyPress(KeyEvent.VK_CONTROL);
-                robot.keyPress(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_V);
-                robot.keyRelease(KeyEvent.VK_CONTROL);
-                robot.keyPress(KeyEvent.VK_ENTER);
-                robot.keyRelease(KeyEvent.VK_ENTER);
-                break;
-
+                    robot.keyRelease(KeyEvent.VK_SHIFT);
+                    robot.keyRelease(KeyEvent.VK_G);
+                    robot.keyPress(KeyEvent.VK_META);
+                    robot.keyPress(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_META);
+                    robot.keyRelease(KeyEvent.VK_V);
+                    robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+                    robot.delay(2000);
+                    robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+                    break;
+                case "win":
+                    robot.keyPress(KeyEvent.VK_CONTROL);
+                    robot.keyPress(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_CONTROL);
+                    robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+                    break;
+                default:
+                    // In mac machine for chrome you need to switch focus to upload dialog again
+                    // I have saved browser name in properties file you can pass it as string.
+                    if (browserName.equalsIgnoreCase("chrome")) {
+                        robot.keyPress(KeyEvent.VK_META);
+                        robot.keyPress(KeyEvent.VK_TAB);
+                        robot.keyRelease(KeyEvent.VK_META);
+                        robot.keyRelease(KeyEvent.VK_TAB);
+                    }
+                    robot.delay(2000);
+                    robot.keyPress(KeyEvent.VK_META);
+                    robot.keyPress(KeyEvent.VK_SHIFT);
+                    robot.keyPress(KeyEvent.VK_G);
+                    robot.keyRelease(KeyEvent.VK_META);
+                    robot.keyRelease(KeyEvent.VK_SHIFT);
+                    robot.keyRelease(KeyEvent.VK_G);
+                    robot.keyPress(KeyEvent.VK_META);
+                    robot.keyPress(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_META);
+                    robot.keyRelease(KeyEvent.VK_V);
+                    robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+                    robot.delay(2000);
+                    robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+                    break;
+            }
+        }catch(Exception e){
+            LOG.keywordAppender().appendArgument("Message", e.getMessage());
         }
+
 
     }
 }

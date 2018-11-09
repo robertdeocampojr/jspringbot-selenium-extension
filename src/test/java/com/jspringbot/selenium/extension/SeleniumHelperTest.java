@@ -33,7 +33,7 @@ import java.nio.file.Paths;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:spring/spring-selenium-extension-firefox.xml"})
+@ContextConfiguration(locations={"classpath:spring/spring-selenium-extension-chrome.xml"})
 public class SeleniumHelperTest {
 
 
@@ -75,16 +75,32 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    public void testHelpers2() throws InterruptedException {
+    public void testHelpers2() throws Exception {
         //System.getProperty("user.dir");
-        helper.navigateTo("https://qareg.ttxrdm.com/sx200/login.xhtml");
-        helper.sendKeys("id=username", "qauser");
-        helper.sendKeys("id=password", "Aut0mat!on");
-        helper.clickElement("id=loginBtn");
-        helper.clickElement("id=nav_unitsmenu");
-        Thread.sleep(1000);
-        helper.clickElement("id=unitsmenu_sites");
-        Thread.sleep(10000);
+
+        helper.navigateTo("https://robert.app.haveninc.com/login");
+        helper.sendKeys("xpath=//input[@ng-model='signin.credentials.email']", "robertadmin@haveninc.com");
+        helper.sendKeys("xpath=//input[@ng-model='signin.credentials.password']", "haven123!");
+        helper.clickElement("xpath=//button[contains(text(), 'Log In')]");
+
+        helper.waitTillElementFound("xpath=//div[@id='user-dropdown'][@class='user-nav-dropdown-btn ng-binding']");
+        Thread.sleep(5000);
+
+
+        helper.clickElement("id=nav-orders");
+        helper.waitTillElementFound("xpath=//div[@class='filter-input']/input");
+        helper.sendKeys("xpath=//div[@class='filter-input']/input", "328888");
+        helper.clickElement("xpath=//a[contains(.,'328888')]");
+        helper.waitTillElementFound("xpath=//h2[contains(.,'Shipment Details')]");
+
+        Thread.sleep(5000);
+        helper.clickElement("xpath=//div[@class='tab' and contains(.,'Documents')]");
+        Thread.sleep(2000);
+        helper.clickElement("xpath=//button[@title='Click to upload a Packing List' and @type='file']");
+        Thread.sleep(2000);
+
+        extensionHelper.upload("/Users/robert/Pictures/2018-11-09_0934.png");
+        helper.waitTillElementFound("xpath=//button[@class='btn btn-primary pull-right ng-scope']");
         webdriver.quit();
     }
 

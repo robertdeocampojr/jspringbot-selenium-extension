@@ -86,20 +86,21 @@ public class SeleniumHelperTest {
         helper.waitTillElementFound("xpath=//div[@id='user-dropdown'][@class='user-nav-dropdown-btn ng-binding']");
         Thread.sleep(5000);
 
-
+        helper.clickElement("xpath=//a[@class='dashboard-dropdown' and contains(.,'Shipments')]");
         helper.clickElement("id=nav-orders");
         helper.waitTillElementFound("xpath=//div[@class='filter-input']/input");
-        helper.sendKeys("xpath=//div[@class='filter-input']/input", "328888");
-        helper.clickElement("xpath=//a[contains(.,'328888')]");
+        helper.sendKeys("xpath=//div[@class='filter-input']/input", "331544");
+        helper.clickElement("xpath=//a[contains(.,'331544')]");
         helper.waitTillElementFound("xpath=//h2[contains(.,'Shipment Details')]");
 
         Thread.sleep(5000);
         helper.clickElement("xpath=//div[@class='tab' and contains(.,'Documents')]");
         Thread.sleep(2000);
-        helper.clickElement("xpath=//button[@title='Click to upload a Packing List' and @type='file']");
+        //helper.clickElement("xpath=//button[@title='Click to upload a Test QA Name - No assignee' and @type='file']");
         Thread.sleep(2000);
 
-        extensionHelper.upload("/Users/robert/Pictures/2018-11-09_0934.png");
+        //helper.sendKeys("xpath=//button[@title='Click to upload a Test QA Name - No assignee' and @type='file']","/Users/robert/Pictures/2019-02-15_1821b.png");
+        extensionHelper.fileUploadByJS("","/Users/robert/Pictures/2019-02-15_1821b.png");
         helper.waitTillElementFound("xpath=//button[@class='btn btn-primary pull-right ng-scope']");
         webdriver.quit();
     }

@@ -6,6 +6,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -189,15 +190,16 @@ public class SeleniumExtensionHelper{
         // Setting clipboard with file location
         setClipboardData(fileLocation);
 
+        Robot robot;
         try {
             // native key strokes for CTRL, V and ENTER keys
-            Robot robot = new Robot();
+            robot = new Robot();
             Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
 
             String platform = cap.getCapability("platform").toString();
             String browserName = cap.getBrowserName();
 
-            LOG.info("OS: " + platform);
+
             LOG.info("Browser: " + browserName);
             Thread.sleep(2000);
 
@@ -205,6 +207,7 @@ public class SeleniumExtensionHelper{
             switch (platform.toLowerCase()) {
 
                 case "mac":
+                    LOG.info("OS: " + platform);
                     // In mac machine for chrome you need to switch focus to upload dialog again
                     // I have saved browser name in properties file you can pass it as string.
                     if (browserName.equalsIgnoreCase("chrome")) {
@@ -231,10 +234,21 @@ public class SeleniumExtensionHelper{
                     robot.keyRelease(KeyEvent.VK_ENTER);
                     break;
                 case "win":
+                    LOG.info("OS: " + platform);
                     robot.keyPress(KeyEvent.VK_CONTROL);
                     robot.keyPress(KeyEvent.VK_V);
                     robot.keyRelease(KeyEvent.VK_V);
                     robot.keyRelease(KeyEvent.VK_CONTROL);
+                    robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+                    break;
+                case "linux":
+                    LOG.info("OS: " + platform);
+                    robot.keyPress(KeyEvent.VK_META);
+                    robot.delay(500);                    // 200~500
+                    robot.keyPress(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_V);
+                    robot.keyRelease(KeyEvent.VK_META);
                     robot.keyPress(KeyEvent.VK_ENTER);
                     robot.keyRelease(KeyEvent.VK_ENTER);
                     break;
@@ -265,10 +279,48 @@ public class SeleniumExtensionHelper{
                     robot.keyRelease(KeyEvent.VK_ENTER);
                     break;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             LOG.keywordAppender().appendArgument("Message", e.getMessage());
         }
-
-
     }
+
+    public void fileUploadByJS(String locator, String fileLocation) {
+        File filePath = new File(fileLocation);
+
+        LOG.keywordAppender().appendLocator(locator);
+        WebElement element = finder.find(locator);
+
+        String JS_DROP_FILE =
+                "var target = arguments[0]," +
+                        "    offsetX = arguments[1]," +
+                        "    offsetY = arguments[2]," +
+                        "    document = target.ownerDocument || document," +
+                        "    window = document.defaultView || window;" +
+                        "" +
+                        "var input = document.createElement('INPUT');" +
+                        "input.type = 'file';" +
+                        "input.style.display = 'none';" +
+                        "input.onchange = function () {" +
+                        "  var rect = target.getBoundingClientRect()," +
+                        "      x = rect.left + (offsetX || (rect.width >> 1))," +
+                        "      y = rect.top + (offsetY || (rect.height >> 1))," +
+                        "      dataTransfer = { files: this.files };" +
+                        "" +
+                        "  ['dragenter', 'dragover', 'drop'].forEach(function (name) {" +
+                        "    var evt = document.createEvent('MouseEvent');" +
+                        "    evt.initMouseEvent(name, !0, !0, window, 0, 0, 0, x, y, !1, !1, !1, !1, 0, null);" +
+                        "    evt.dataTransfer = dataTransfer;" +
+                        "    target.dispatchEvent(evt);" +
+                        "  });" +
+                        "" +
+                        "  setTimeout(function () { document.body.removeChild(input); }, 25);" +
+                        "};" +
+                        "document.body.appendChild(input);" +
+                        "return input;";
+
+        WebElement input =  (WebElement)this.executor.executeScript(JS_DROP_FILE, element, 0, 0);
+        input.sendKeys(filePath.getAbsoluteFile().toString());
+    }
+
+
 }

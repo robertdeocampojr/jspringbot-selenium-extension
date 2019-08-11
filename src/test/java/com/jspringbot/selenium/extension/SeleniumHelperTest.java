@@ -52,24 +52,73 @@ public class SeleniumHelperTest {
     public SeleniumHelper  helper;
 
 
+    static int lport;
+    static String rhost;
+    static int rport;
+
     @Test
+    public void testSSHForwarding(){
+        String user = "robert";
+        String password = "Rectawt6";
+        String host = "pharos.haveninc.com";
+        int port=22;
+
+
+        try{
+            JSch jsch = new JSch();
+            Session session = jsch.getSession(user, host, 22);
+            lport = 3309;
+            rhost = "stage.db.hvn.io";
+            rport = 3306;
+            //session.setPassword(password);
+
+
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+            jsch.addIdentity("~/.ssh/id_rsa", password);
+            System.out.println("Establishing Connection...");
+
+            //jsch.setKnownHosts("~/.ssh/known_hosts");
+
+
+            session.connect();
+            int assinged_port = session.setPortForwardingL(lport, rhost, rport);
+            System.out.println("localhost:"+ assinged_port + " -> " + rhost + ":" +rport);
+            Thread.sleep(30000);
+
+
+            session.disconnect();
+            System.out.println("DONE!!!");
+        }catch (Exception e){
+            System.out.println("Error Connecting");
+        }
+    }
+
+
     public void testSSH() throws InterruptedException {
 
-        String host = "dev-ws03.adchemy.colo";
-        String user = "ubuntu";
+        String host = "pharos.haveninc.com";
+        String user = "robert";
         String password = "password";
         String command = "ls -ltr";
         try {
             Properties config = new Properties();
             config.put("StrictHostKeyChecking", "no");
             JSch jsch = new JSch();
-            jsch.addIdentity("/zeta/actions-dev.pem");
+            //jsch.addIdentity("/zeta/actions-dev.pem");
             // Create a JSch session to connect to the server
             Session session = jsch.getSession(user, host, 22);
+
+            session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+            //jsch.setKnownHosts("~/.ssh/known_hosts");
+            jsch.addIdentity("~/.ssh/id_rsa", "Rectawt6");
+
+            session.setConfig("StrictHostKeyChecking", "no");
+
             //session.setPassword(password);
-            session.setConfig(config);
+            //session.setConfig(config);
             // Establish the connection
-            session.connect();
+            session.connect(30000);
             System.out.println("Connected...");
 
             ChannelExec channel = (ChannelExec) session.openChannel("exec");

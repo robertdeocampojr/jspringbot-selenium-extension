@@ -88,8 +88,13 @@
     <property name="username" value="${ssh.connect.username:user}"/>
     <property name="password" value="${ssh.connect.password:user}"/>
     <property name="port" value="${ssh.connect.port:22}"/>
-    <property name="keypair" value="${ssh.connect.pem.location:none}"/>
+    <property name="keyPemFile" value="${ssh.connect.pem.location:none}"/>
     <property name="strictHostKeyChecking" value="${ssh.connect.strict.hostKey.checking:no}"/>
+    <property name="hostname" value="${ssh.connect.remote.hostname:localhost}"/>
+    <property name="hostname" value="${ssh.connect.local.port :localhost}"/>
+    <property name="hostname" value="${ssh.connect.hostname:localhost}"/>
+    <property name="hostname" value="${ssh.connect.hostname:localhost}"/>
+    <property name="hostname" value="${ssh.connect.hostname:localhost}"/>
   </bean>
 
   <!-- Scan components -->

@@ -18,10 +18,40 @@ public class SSHExtensionHelper {
     private String hostname;
     private String username;
     private String password;
-    private String keypair;
+    private String keyPemFile;
     private String strictHostKeyChecking;
     private int port;
+    private String databaseHostname;
+    private int localPort;
+    private int remotePort;
+    private String idrsaFilename;
+    private String preferredAuthentications;
 
+
+
+    public void setKeyPemFile(String keyPemFile) {
+        this.keyPemFile = keyPemFile;
+    }
+
+    public void setDatabaseHostname(String databaseHostname) {
+        this.databaseHostname = databaseHostname;
+    }
+
+    public void setLocalPort(int localPort) {
+        this.localPort = localPort;
+    }
+
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
+    }
+
+    public void setIdrsaFilename(String idrsaFilename) {
+        this.idrsaFilename = idrsaFilename;
+    }
+
+    public void setPreferredAuthentications(String preferredAuthentications) {
+        this.preferredAuthentications = preferredAuthentications;
+    }
 
     public void setHostname(String hostname) {
         this.hostname = hostname;
@@ -35,24 +65,22 @@ public class SSHExtensionHelper {
         this.password = password;
     }
 
-    public void setKeypair(String keypair) {
-        this.keypair = keypair;
-    }
-
     public void setStrictHostKeyChecking(String strictHostKeyChecking) {
         this.strictHostKeyChecking = strictHostKeyChecking;
     }
-
     public void setPort(int port) {
         this.port = port;
     }
+
+
+
 
     public void sshConnectByPem(){
         try{
             config = new Properties();
             config.put("StrictHostKeyChecking", strictHostKeyChecking);
             jsch = new JSch();
-            jsch.addIdentity(keypair);
+            jsch.addIdentity(keyPemFile);
 
             // Create a JSch session to connect to the server
             Session session = jsch.getSession(username, hostname, port);

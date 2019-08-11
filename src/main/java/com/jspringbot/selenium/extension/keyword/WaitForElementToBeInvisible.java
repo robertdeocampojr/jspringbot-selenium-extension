@@ -18,19 +18,20 @@
 
 package com.jspringbot.selenium.extension.keyword;
 
-import com.jspringbot.selenium.extension.SeleniumExtensionHelper;
-import com.jspringbot.selenium.extension.UtilityHelper;
-import org.jspringbot.Keyword;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jspringbot.KeywordInfo;
+import org.springframework.stereotype.Component;
 
 
-public abstract class AbstractSeleniumExtensionKeyword implements Keyword {
+@Component
+@KeywordInfo(
+        name = "Wait For Element To Be Invisible",
+        parameters = {"locator", "timeout"},
+        description = "classpath:desc/WaitForElementToBeVisible.txt"
+)
+public class WaitForElementToBeInvisible extends AbstractSeleniumExtensionKeyword {
 
-    @Autowired
-    protected SeleniumExtensionHelper helper;
-    @Autowired
-    protected UtilityHelper utilityHelper;
-
-    public AbstractSeleniumExtensionKeyword() {
+    @Override
+    public Object execute(Object[] params) {
+        return helper.waitElementToBeInvisible(String.valueOf(params[0]), Integer.valueOf(params[1].toString()));
     }
 }

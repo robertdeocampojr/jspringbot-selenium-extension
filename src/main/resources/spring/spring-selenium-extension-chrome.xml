@@ -48,7 +48,7 @@
 
   <import resource="spring-browser-mob-proxy.xml"/>
 
-  <bean id="webdriver" class="org.openqa.selenium.chrome.ChromeDriver" destroy-method="stopClient">
+  <bean id="webdriver" class="org.openqa.selenium.chrome.ChromeDriver" destroy-method="quit">
     <constructor-arg ref="desiredCapabilities"/>
   </bean>
 
@@ -79,6 +79,17 @@
 
   <bean id="extensionHelper" class="com.jspringbot.selenium.extension.SeleniumExtensionHelper">
     <constructor-arg ref="webdriver"/>
+  </bean>
+
+  <bean id="utilityHelper" class="com.jspringbot.selenium.extension.UtilityHelper" />
+
+  <bean class="com.jspringbot.selenium.extension.SSHExtensionHelper">
+    <property name="hostname" value="${ssh.connect.hostname:localhost}"/>
+    <property name="username" value="${ssh.connect.username:user}"/>
+    <property name="password" value="${ssh.connect.password:user}"/>
+    <property name="port" value="${ssh.connect.port:22}"/>
+    <property name="keypair" value="${ssh.connect.pem.location:none}"/>
+    <property name="strictHostKeyChecking" value="${ssh.connect.strict.hostKey.checking:no}"/>
   </bean>
 
   <!-- Scan components -->

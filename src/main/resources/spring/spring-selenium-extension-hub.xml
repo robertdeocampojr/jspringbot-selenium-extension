@@ -16,6 +16,8 @@
     <constructor-arg ref="webdriver"/>
   </bean>
 
+  <bean id="utilityHelper" class="com.jspringbot.selenium.extension.UtilityHelper" />
+
 
   <!-- Scan components -->
   <ctx:component-scan base-package="com.jspringbot.selenium.extension.keyword"/>

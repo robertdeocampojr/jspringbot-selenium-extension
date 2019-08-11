@@ -5,6 +5,8 @@ import org.jspringbot.syntax.HighlightRobotLogger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -82,6 +84,26 @@ public class SeleniumExtensionHelper{
         LOG.keywordAppender().appendLocator("Values:", values);
         return values;
     }
+
+    public List<String> getLElementsTextByXpath(String locator){
+        LOG.keywordAppender().appendLocator(locator);
+        ArrayList values = new ArrayList();
+
+        List<WebElement> elements = driver.findElements(By.xpath(locator));
+
+        if(elements.isEmpty()){
+            return null;
+        }
+        for(WebElement element : elements) {
+            String value = element.getText();
+            LOG.keywordAppender().appendArgument("value= ", value);
+            values.add(value);
+        }
+
+        LOG.keywordAppender().appendLocator("Values:", values);
+        return values;
+    }
+
 
     public String getSelectSize(String locator){
         LOG.keywordAppender().appendLocator(locator);
@@ -184,6 +206,7 @@ public class SeleniumExtensionHelper{
         // operations.
         StringSelection stringSelection = new StringSelection(string);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+
     }
 
     public void upload(String fileLocation) {
@@ -322,5 +345,100 @@ public class SeleniumExtensionHelper{
         input.sendKeys(filePath.getAbsoluteFile().toString());
     }
 
+    public boolean waitElementToBePresent(String locator, int timeOut){
+        LOG.keywordAppender().appendLocator(locator);
+        boolean isPresent= false;
 
+        try{
+            (new WebDriverWait(driver, timeOut)).until(ExpectedConditions.presenceOfElementLocated(parseLocatorBy(locator)));
+            isPresent = true;
+        }catch (Exception e){
+            isPresent = false;
+        }finally {
+            LOG.keywordAppender().append(String.format("%s", isPresent));
+        }
+
+        return isPresent;
+    }
+
+    public boolean waitElementToBeVisible(String locator, int timeOut){
+        LOG.keywordAppender().appendLocator(locator);
+        boolean isVisible = false;
+
+        try{
+            (new WebDriverWait(driver, timeOut)).until(ExpectedConditions.visibilityOfElementLocated(parseLocatorBy(locator)));
+            isVisible = true;
+        }catch (Exception e){
+            isVisible = false;
+        }finally {
+            LOG.keywordAppender().append(String.format("%s", isVisible));
+        }
+
+        return isVisible;
+    }
+
+    public boolean waitElementToBeClickable(String locator, int timeOut){
+        LOG.keywordAppender().appendLocator(locator);
+        boolean isClickable= false;
+
+        try{
+            (new WebDriverWait(driver, timeOut)).until(ExpectedConditions.elementToBeClickable(parseLocatorBy(locator)));
+            isClickable = true;
+        }catch (Exception e){
+            isClickable = false;
+        }finally {
+            LOG.keywordAppender().append(String.format("%s", isClickable));
+        }
+
+        return isClickable;
+    }
+
+    public boolean waitElementToBeInvisible(String locator, int timeOut){
+        LOG.keywordAppender().appendLocator(locator);
+        boolean isInvisible = false;
+
+        try{
+            (new WebDriverWait(driver, timeOut)).until(ExpectedConditions.invisibilityOfElementLocated(parseLocatorBy(locator)));
+            isInvisible = true;
+        }catch (Exception e){
+            isInvisible = false;
+        }finally {
+            LOG.keywordAppender().append(String.format("%s", isInvisible));
+        }
+
+        return isInvisible;
+    }
+
+
+
+    private By parseLocatorBy(String locator){
+        String [] stringList = locator.split("=", 2);
+
+        String locatorBy = stringList[0];
+        String locatorValue = stringList[1];
+
+        System.out.println("by: " + locatorBy);
+        System.out.println("value: " +  locatorValue);
+
+
+        switch (locatorBy){
+            case "id":
+                return By.id(locatorValue);
+            case "name":
+                return By.name(locatorValue);
+            case  "xpath":
+                return By.xpath(locatorValue);
+            case  "className":
+                return By.className(locatorValue);
+            case "css":
+                return By.cssSelector(locatorValue);
+            case "linkText":
+                return By.linkText(locatorValue);
+            case "partialLinkText":
+                return By.partialLinkText(locatorValue);
+            default:
+                LOG.keywordAppender().append("Invalid locatorBy: " + locatorBy);
+                return null;
+        }
+    }
 }

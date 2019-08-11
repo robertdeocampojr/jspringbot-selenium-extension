@@ -74,7 +74,7 @@
     </property>
   </bean>
 
-  <bean id="webdriver" class="org.openqa.selenium.firefox.FirefoxDriver" destroy-method="stopClient">
+  <bean id="webdriver" class="org.openqa.selenium.firefox.FirefoxDriver" destroy-method="quit">
     <constructor-arg ref="firefoxOptions"/>
   </bean>
 
@@ -104,6 +104,7 @@
     <constructor-arg ref="webdriver"/>
   </bean>
 
+  <bean id="utilityHelper" class="com.jspringbot.selenium.extension.UtilityHelper" />
 
 
 

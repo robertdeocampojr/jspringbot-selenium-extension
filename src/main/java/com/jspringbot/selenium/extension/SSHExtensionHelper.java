@@ -72,9 +72,6 @@ public class SSHExtensionHelper {
         this.port = port;
     }
 
-
-
-
     public void sshConnectByPem(){
         try{
             config = new Properties();
@@ -115,7 +112,41 @@ public class SSHExtensionHelper {
         }
     }
 
-    public void sshDisconnect(){
+    public void sshConnectDatabaseByRsa(){
+        try{
+            jsch = new JSch();
+            jsch.addIdentity(idrsaFilename, password);
+
+            // Create a JSch session to connect to the server
+            Session session = jsch.getSession(username, hostname, port);
+            session.setPassword(password);
+            session.setConfig("StrictHostKeyChecking", strictHostKeyChecking);
+            session.setConfig("PreferredAuthentications", preferredAuthentications);
+
+
+            LOG.info("Establishing Connection...");
+            session.connect(30000);
+            LOG.info(String.format("Connected to '%s' ", hostname));
+
+            session.setPortForwardingL(localPort, databaseHostname, remotePort);
+            LOG.info(String.format("Success Port Forwarding to '%s' ", databaseHostname));
+        }catch(JSchException e){
+            LOG.warn(String.format("Cannot connect to '%s' ", hostname));
+            LOG.warn(String.format("Error Message '%s' ", e.getMessage()));
+        }
+    }
+
+    public void sshChannelDisconnect(){
+        try{
+            channel.disconnect();
+            LOG.info(String.format("Disconnected to Channel", hostname));
+        }catch(Exception e){
+            LOG.warn(String.format("Cannot disconnect to Channel ", hostname));
+            LOG.warn(String.format("Error Message Channel: ", e.getMessage()));
+        }
+    }
+
+    public void ssSessionDisconnect(){
         try{
             channel.disconnect();
             session.disconnect();
@@ -125,7 +156,6 @@ public class SSHExtensionHelper {
             LOG.warn(String.format("Error Message '%s' ", e.getMessage()));
         }
     }
-
 
 
 

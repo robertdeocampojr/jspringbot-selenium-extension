@@ -18,22 +18,19 @@
 
 package com.jspringbot.selenium.extension.keyword;
 
-import com.jspringbot.selenium.extension.SSHExtensionHelper;
-import com.jspringbot.selenium.extension.SeleniumExtensionHelper;
-import com.jspringbot.selenium.extension.UtilityHelper;
-import org.jspringbot.Keyword;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jspringbot.KeywordInfo;
+import org.springframework.stereotype.Component;
 
+@Component
+@KeywordInfo(
+        name = "SSH Session Disconnect",
+        description = "classpath:desc/sshDisconnect.txt"
+)
+public class sshDisconnect extends AbstractSeleniumExtensionKeyword {
 
-public abstract class AbstractSeleniumExtensionKeyword implements Keyword {
-
-    @Autowired
-    protected SeleniumExtensionHelper helper;
-    @Autowired
-    protected UtilityHelper utilityHelper;
-    @Autowired
-    protected SSHExtensionHelper sshHelper;
-
-    public AbstractSeleniumExtensionKeyword() {
+    @Override
+    public Object execute(Object[] params) {
+        sshHelper.ssSessionDisconnect();
+        return null;
     }
 }

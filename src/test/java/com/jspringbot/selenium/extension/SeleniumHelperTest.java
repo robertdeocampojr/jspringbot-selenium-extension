@@ -50,13 +50,21 @@ public class SeleniumHelperTest {
     public UtilityHelper  util;
     @Autowired
     public SeleniumHelper  helper;
-
+    @Autowired
+    public SSHExtensionHelper  sshHelper;
 
     static int lport;
     static String rhost;
     static int rport;
 
     @Test
+    public void testSSHForwarding2() throws InterruptedException {
+        sshHelper.sshConnectDatabaseByRsa();
+        Thread.sleep(60000);
+        sshHelper.ssSessionDisconnect();
+    }
+
+
     public void testSSHForwarding(){
         String user = "robert";
         String password = "Rectawt6";

@@ -83,18 +83,18 @@
 
   <bean id="utilityHelper" class="com.jspringbot.selenium.extension.UtilityHelper" />
 
-  <bean class="com.jspringbot.selenium.extension.SSHExtensionHelper">
+  <bean id="sshHelper" class="com.jspringbot.selenium.extension.SSHExtensionHelper">
     <property name="hostname" value="${ssh.connect.hostname:localhost}"/>
     <property name="username" value="${ssh.connect.username:user}"/>
     <property name="password" value="${ssh.connect.password:user}"/>
     <property name="port" value="${ssh.connect.port:22}"/>
     <property name="keyPemFile" value="${ssh.connect.pem.location:none}"/>
     <property name="strictHostKeyChecking" value="${ssh.connect.strict.hostKey.checking:no}"/>
-    <property name="hostname" value="${ssh.connect.remote.hostname:localhost}"/>
-    <property name="hostname" value="${ssh.connect.local.port :localhost}"/>
-    <property name="hostname" value="${ssh.connect.hostname:localhost}"/>
-    <property name="hostname" value="${ssh.connect.hostname:localhost}"/>
-    <property name="hostname" value="${ssh.connect.hostname:localhost}"/>
+    <property name="databaseHostname" value="${ssh.connect.remote.hostname:localhost}"/>
+    <property name="localPort" value="${ssh.connect.local.port:3309}"/>
+    <property name="remotePort" value="${ssh.connect.remote.port:3306}"/>
+    <property name="idrsaFilename" value="${ssh.connect.idrsa.filename:~/.ssh/id_rsa}"/>
+    <property name="preferredAuthentications" value="${ssh.connect.pref.auth:publickey,keyboard-interactive,password}"/>
   </bean>
 
   <!-- Scan components -->

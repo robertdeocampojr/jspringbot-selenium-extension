@@ -244,7 +244,11 @@ public class DesiredCapabilitiesBean implements InitializingBean, DisposableBean
             ZipEntry entry;
             while((entry = zin.getNextEntry()) != null) {
                 FileOutputStream out = null;
-                entryFile = new File(dir, entry.getName());
+                final File zipEntryFile = new File(dir,entry.getName());
+                if (!zipEntryFile.toPath().normalize().startsWith(dir.toPath().normalize())) {
+                    throw new IOException("Bad zip entry");
+                }
+                entryFile = zipEntryFile;
 
                 try {
                     out = new FileOutputStream(entryFile);
